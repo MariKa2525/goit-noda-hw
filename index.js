@@ -1,31 +1,40 @@
-const functions = require('./contacts.js')
+const functions = require('./contacts')
 
-const argv = require("yargs").argv;
 
-function invokeAction({ action, id, name, email, phone }) {
+// functions.listContacts();
+// functions.getContactById('5');
+// functions.removeContact('7');
+// functions.addContact('Anna Anna', 'email.@gmail.com', '(888) 212-212');
+
+const argv = require('yargs').argv
+
+async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
-    case "list":
-        functions.listContacts()
-      break;
+    case 'list':
+      const contactList = await functions.listContacts()
+      console.table(contactList)
+      break
+    case 'get':
+      const contact = await functions.getContactById(id)
+      console.table(contact)
+      break
 
-    case "get":
-        functions.getContactById(id)
-      break;
+    case 'add':
+      const newContact = await functions.addContact(name, email, phone)
+      console.table(newContact)
+      break
 
-    case "add":
-        functions.addContact(name, email, phone)
-      break;
-
-    case "remove":
-        functions.removeContact(id)
-      break;
+    case 'remove':
+      const removeContact = await functions.removeContact(id)
+      console.table(removeContact)
+      break
 
     default:
-      console.warn("\x1B[31m Unknown action type!");
+      console.warn('\x1B[31m Unknown action type!')
   }
 }
 
-invokeAction(argv);
+invokeAction(argv)
 
 // // index.js
 // const argv = require('yargs').argv;
